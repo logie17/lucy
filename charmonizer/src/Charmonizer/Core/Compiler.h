@@ -73,7 +73,7 @@ void
 chaz_CC_clean_up(void);
 
 void
-chaz_CC_warnings_as_errors(const int flag);
+chaz_CC_set_warnings_as_errors(const int flag);
 
 #ifdef CHAZ_USE_SHORT_NAMES
   #define CC_compile_exe              chaz_CC_compile_exe
@@ -83,7 +83,7 @@ chaz_CC_warnings_as_errors(const int flag);
   #define CC_test_compile             chaz_CC_test_compile
   #define CC_capture_output           chaz_CC_capture_output
   #define CC_init                     chaz_CC_init
-  #define CC_warnings_as_errors       chaz_CC_warnings_as_errors
+  #define CC_set_warnings_as_errors   chaz_CC_set_warnings_as_errors
 #endif
 
 #ifdef __cplusplus
