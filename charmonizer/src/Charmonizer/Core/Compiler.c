@@ -45,6 +45,12 @@ static char      exe_flag[10]     = "";
 static int       defines___GNUC__  = 0;
 static int       defines__MSC_VER  = 0;
 static int       defines___clang__ = 0;
+static int       warnings_as_errors = 0;    
+
+void
+CC_warnings_as_errors(const int flag) {
+    warnings_as_errors = flag;
+}
 
 void
 CC_init(const char *compiler_command, const char *compiler_flags) {
@@ -169,6 +175,13 @@ CC_compile_exe(const char *source_path, const char *exe_name,
     char    *junk              = (char*)malloc(junk_buf_size);
     size_t   exe_file_buf_len  = sprintf(exe_file, "%s%s", exe_name, exe_ext);
     char    *inc_dir_string    = S_inc_dir_string();
+    if (  warnings_as_errors != 0 ) {
+        if ( defines___GNUC__  != 0 && defines___clang__ != 0 ) {
+            strcat(cc_flags, "-Werror");
+        } else if (  defines__MSC_VER != 0 )  {
+            strcat(cc_flags, "/WX");
+        }
+    }
     size_t   command_max_size  = strlen(cc_command)
                                  + strlen(source_path)
                                  + strlen(exe_flag)
@@ -226,6 +239,13 @@ CC_compile_obj(const char *source_path, const char *obj_name,
     char    *obj_file          = (char*)malloc(obj_file_buf_size);
     size_t   obj_file_buf_len  = sprintf(obj_file, "%s%s", obj_name, obj_ext);
     char    *inc_dir_string    = S_inc_dir_string();
+    if (  warnings_as_errors != 0 ) {
+        if ( defines___GNUC__ != 0 && defines___clang__ != 0 ) {
+            strcat(cc_command, " -Werror");
+        } else if (  defines__MSC_VER != 0 )  {
+            strcat(cc_command, " /WX");
+        }
+    }
     size_t   command_max_size  = strlen(cc_command)
                                  + strlen(source_path)
                                  + strlen(object_flag)
